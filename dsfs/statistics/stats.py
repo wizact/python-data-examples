@@ -4,6 +4,7 @@ from typing import List
 
 import matplotlib.pyplot as plt
 from scratch.linear_algebra import sum_of_squares
+from scratch.linear_algebera import dot
 
 num_friends: List[float] = [
     100,
@@ -107,10 +108,28 @@ def variance(xs: List[float]) -> float:
     deviations = de_mean(xs)
     return sum_of_squares(deviations) / n - 1
 
+
 def std_deviation(xs: List[float]) -> float:
     """Returns the standard deviation of a sample"""
     return math.sqrt(variance(xs))
 
+
 def interquartile_range(xs: List[float]) -> float:
     """Returns the difference between the 75%-ile and the 25%-ile"""
     return quantile(xs, 0.75) - quantile(xs, 0.25)
+
+
+def covariance(xs: List[float], ys: List[float]) -> float:
+    assert len(xs) == len(ys), "xs and ys must have the same lenght"
+
+    return dot(de_mean(xs), de_mean(ys)) / (len(xs) - 1)
+
+
+def correlation(xs: List[float], ys: List[float]) -> float:
+    """Measures how much xs and ys vary in tandem about their means"""
+    stdev_x = std_deviation(xs)
+    stdev_y = std_deviation(ys)
+    if stdev_x > 0 and stdev_y > 0:
+        return covariance(xs, ys) / stdev_x / stdev_y
+    else:
+        return 0
